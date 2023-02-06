@@ -21,20 +21,22 @@ class HashtagWidget extends WidgetType {
   override ignoreEvent(): boolean { return false }
 }
 
-const hashTagMatchDecorator = new MatchDecorator({
-  regexp: /#([^ ]+)/g,
-  decoration: match => Decoration.replace({
-    widget: new HashtagWidget(match[1]),
-  })
+const hashtagMatchDecorator = new MatchDecorator({
+  regexp: /#([^ #]+)/g,
+  // decoration: match => Decoration.replace({
+  //   widget: new HashtagWidget(match[1]),
+  // }),
+  boundary: /#([^ #]+)/g,
+  decoration: Decoration.mark({class: `cm-hashtag`})
 })
 
 export const hashtagMatcher = ViewPlugin.fromClass(class {
   placeholders: DecorationSet
   constructor(view: EditorView) {
-    this.placeholders = hashTagMatchDecorator.createDeco(view)
+    this.placeholders = hashtagMatchDecorator.createDeco(view)
   }
   update(update: ViewUpdate) {
-    this.placeholders = hashTagMatchDecorator.updateDeco(update, this.placeholders)
+    this.placeholders = hashtagMatchDecorator.updateDeco(update, this.placeholders)
   }
 }, {
   decorations: instance => instance.placeholders,

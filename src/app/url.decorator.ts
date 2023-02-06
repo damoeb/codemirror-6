@@ -1,13 +1,20 @@
-import {Decoration, DecorationSet, EditorView, MatchDecorator, ViewPlugin, ViewUpdate} from "@codemirror/view";
+import {
+  Decoration,
+  DecorationSet,
+  EditorView,
+  MatchDecorator,
+  ViewPlugin,
+  ViewUpdate
+} from "@codemirror/view";
 
-const urlDecoration = Decoration.mark({class: "cm-url"})
+const urlDecoration = Decoration.mark({class: "cm-url", inclusive: true})
 
 const urlMatchDecorator = new MatchDecorator({
   regexp: /(https?:\/\/[.a-zA-Z0-9_\-]+\.[a-zA-Z0-9_\-]+)/g,
-  decoration: match => urlDecoration
+  decoration: urlDecoration
 })
 
-export const urlMatcher = ViewPlugin.fromClass(class {
+export const urlDecorator = ViewPlugin.fromClass(class {
   placeholders: DecorationSet
   constructor(view: EditorView) {
     this.placeholders = urlMatchDecorator.createDeco(view)
@@ -17,7 +24,4 @@ export const urlMatcher = ViewPlugin.fromClass(class {
   }
 }, {
   decorations: instance => instance.placeholders,
-  provide: plugin => EditorView.atomicRanges.of(view => {
-    return view.plugin(plugin)?.placeholders || Decoration.none
-  })
 })

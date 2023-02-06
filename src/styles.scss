@@ -1,1 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+.cm-line:has(.cm-blockquote) {
+//": {paddingLeft: '1.5em'},
+  background: #efefef;
+  border-left: 4px solid #cccccc;
+}
+
+.cm-activeLine {
+  [class*="-mark"] {
+    color: blue;
+  }
+}
